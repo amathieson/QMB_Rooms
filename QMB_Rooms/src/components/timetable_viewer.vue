@@ -12,7 +12,7 @@
             <div class="separator">{{day}}</div>
             <div class="event" v-for="event in grp">
               <div>
-                <h1>{{event.module?.name + event.title}}</h1>
+                <h1>{{event.module.name === undefined ? event.title : event.module.name}}</h1>
                 <sub>{{ event.module.code }}</sub>
                 <h2>{{ event.staff }}</h2>
               </div>
