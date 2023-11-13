@@ -118,6 +118,7 @@ export default {
   opacity: 1;
   width: 100%;
   height: 100%;
+  transition: opacity 250ms ease-in-out 0ms, width 0ms linear 0ms, height 0ms linear 0ms;
 }
 
 .dialog-backdrop[open=false] {

@@ -216,12 +216,7 @@ export default {
       root: "https://adam.mathieson.dev/qmb",
       // root: "http://localhost:8080",
       days: ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
-      notes: {
-        "Lab 3":"Lab 3 is intended for use by engineering students outside of timetabled teaching time. No computing facilities available in this room. More spaces are available in Labs 0-2.",
-        "Lab 4":"Lab 4 is intended for use by 4th year undergraduates outside of timetabled teaching time. More spaces are available in Labs 0-2.",
-        "Lab 5":"Lab 5 is intended for use by TPG students outside of timetabled teaching time. More spaces are available in Labs 0-2.",
-        "Seminar Room":"No Computing facilities available in this room, suitable for laptop users.",
-      }
+      notes: {}
     }
   },
   mounted() {
@@ -229,6 +224,7 @@ export default {
   },
   methods: {
     fetchData: (that)=>{
+      fetch(that.root + "/get_notices.php").then((d)=>{d.json().then((dta)=>{that.notes = dta})});
       fetch( that.root + "/get_availabilities.php").then((d)=>{d.json().then((dta)=>{
         let arr = [];
         for (const dtaKey in dta.rooms) {
