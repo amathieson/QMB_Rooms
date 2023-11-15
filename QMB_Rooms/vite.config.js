@@ -1,11 +1,12 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import {VitePWA} from 'vite-plugin-pwa';
+import { splitVendorChunkPlugin } from 'vite';
 
 // https://vitejs.dev/config/
 export default defineConfig({
   base: '/qmb/',
-  plugins: [vue(),VitePWA({
+  plugins: [vue(),splitVendorChunkPlugin(),VitePWA({
     manifest: {
       "name": "QMB_Rooms",
       "short_name": "QMB_Rooms",
@@ -59,5 +60,8 @@ export default defineConfig({
   })],
   build: {
     base: '/qmb/',
+    minify: true,
+    cssCodeSplit: true,
+    modulePreload: false,
   }
 })
