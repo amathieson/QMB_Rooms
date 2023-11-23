@@ -3,6 +3,13 @@ $rootDir = "/var/www/html/qmb/";
 //$rootDir = "";
 header("content-type: application/json");
 ini_set("date.timezone", "Europe/London");
+$arrContextOptions=array(
+    "ssl"=>array(
+        "verify_peer"=>false,
+        "verify_peer_name"=>false,
+    ),
+);
+
 $_AccessPath = "https://timetable.dundee.ac.uk:8086/reporting/textspreadsheet?objectclass=locations&idtype=id" .
 "&identifier=9994.0.G03" . // Lab 0
 "&identifier=9994.0.G04" . // Lab 1
@@ -13,7 +20,7 @@ $_AccessPath = "https://timetable.dundee.ac.uk:8086/reporting/textspreadsheet?ob
 "&identifier=9994-G.08" . // Seminar Room
 "&template=SWSCUST+location+textspreadsheet";
 $events = [];
-$html = file_get_contents($_AccessPath);
+$html = file_get_contents($_AccessPath, false, stream_context_create($arrContextOptions));
 $modules = json_decode(file_get_contents($rootDir . "cache/modules.json"));
 
 $doc = new DOMDocument();
