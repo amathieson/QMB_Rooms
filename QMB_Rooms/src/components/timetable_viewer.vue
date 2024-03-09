@@ -1,7 +1,9 @@
 <script setup>
 
 </script>
-
+<!-- Page doesn't refresh correctly, the colours don't update-->
+<!-- Comment was written by Purple following a long day of stage construction =D -->
+<!--  Hi future Adam. -->
 <template>
   <div :open="open" class="dialog-backdrop" ref="backdrop" @click="close">
     <transition mode="in-out">
