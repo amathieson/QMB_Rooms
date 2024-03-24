@@ -11,9 +11,9 @@ $arrContextOptions=array(
 );
 
 $_AccessPath = "https://timetable.dundee.ac.uk:8086/reporting/textspreadsheet?objectclass=locations&idtype=id" .
-"&identifier=9994.0.G03" . // Lab 0
-"&identifier=9994.0.G04" . // Lab 1
-"&identifier=9994.0.G06" . // Lab 2
+"&identifier=9994.0.G03" . // Lab 0 - General Teaching Labs
+"&identifier=9994.0.G04" . // Lab 1 - General Teaching Labs
+"&identifier=9994.0.G06" . // Lab 2 - General Teaching Labs
 "&identifier=9994.0.G11" . // Lab 3 - Consider Marking Social Space
 "&identifier=9994.1.1.12" . // Lab 4 - 4th Years
 "&identifier=9994.1.1.13" . // Lab 5 - MsC
