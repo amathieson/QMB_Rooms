@@ -2,19 +2,105 @@
 </script>
 
 <template>
+  <div class="image-container">
+    <img src="./assets/modules/CS11001.png">
+  </div>
   <div class="container">
-    <div class="image-container">
-      <img src="">
-    </div>
-    <img src="" class="logo">
-    <h1>Lab 0</h1>
+    <h1 class="room">Queen Mother Building - Lab 0</h1>
+    <img src="./assets/UoD-White.svg" class="logo">
     <div class="lower-section">
-      <h2>Big Data Analysis module (AC51011)</h2>
-      <sub>Samuel, Oluwafemi,Janjic, Vladimir,z A N Other (Comp 1)</sub>
-      <h3>09:00</h3>
+      <div>
+        <h2>Front End Website Development module (CS11001)</h2>
+        <sub>Samuel, Oluwafemi,Janjic, Vladimir,z A N Other (Comp 1)</sub>
+      </div>
+      <h3>{{ time }}</h3>
     </div>
   </div>
 </template>
+<script>
+export default {
+  data: ()=>{
+    return {
+      time: ""
+    }
+  },
+  mounted() {
+    setInterval(()=>{
+      const date = new Date();
+      let hours = date.getHours();
+      let minutes = date.getMinutes();
+      hours = hours <= 9 ? `${hours}`.padStart(2, 0) : hours;
+      minutes = minutes <= 9 ? `${minutes}`.padStart(2, 0) : minutes;
+      this.time = `${hours}:${minutes}`
+    })
+  }
+}
+</script>
 
 <style scoped>
+.container {
+  display: grid;
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  grid-template-rows: 10vh auto 25vh;
+  grid-template-columns: auto 25vw;
+  z-index: 100;
+}
+.container > * {
+  text-align: left;
+  max-height: 100%;
+}
+.lower-section {
+  grid-row: 3;
+  grid-column: 1 / 3;
+  background: rgba(255, 255, 255, 0.87);
+  color: black;
+  padding: 2em;
+  display: grid;
+  grid-template-columns: auto 15vw;
+  grid-template-rows: auto auto;
+  box-shadow: #1a1a1ab0 0 0 20px 0;
+}
+h1, h2, h3 {
+  margin: 0;
+}
+h3 {
+  text-align: center;
+  font-size: 3em;
+  grid-row: 1 / 3;
+  grid-column: 2;
+  align-self: center;
+}
+.image-container {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 50;
+  display: grid;
+  justify-content: center;
+}
+.logo {
+  padding: 1.5vw;
+  justify-self: end;
+}
+h1 {
+  padding: 1.5vw;
+}
+h2 {
+  font-size: 2em;
+}
+sub {
+  color: #4365e2;
+  font-weight: bold;
+}
+.image-container > img {
+  width: 110vw;
+  opacity: .5;
+  filter: brightness(0.8) contrast(0.5) blur(5px);
+}
 </style>
