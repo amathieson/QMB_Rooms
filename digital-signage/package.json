@@ -12,6 +12,7 @@
     "vue": "^3.4.21"
   },
   "devDependencies": {
+    "@gradio/client": "^0.15.0",
     "@vitejs/plugin-vue": "^5.0.4",
     "vite": "^5.2.0"
   }
