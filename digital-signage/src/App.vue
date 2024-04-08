@@ -18,7 +18,6 @@
   </div>
 </template>
 <script>
-// Look into moving these
 import CS11001 from "./assets/modules/CS11001.png";
 export default {
   data: ()=>{
