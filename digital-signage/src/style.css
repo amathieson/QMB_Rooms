@@ -88,6 +88,6 @@ sub {
 }
 .image-container > img {
   width: 110vw;
-  opacity: .5;
+  opacity: .75;
   filter: brightness(0.8) contrast(0.5) blur(5px);
 }
