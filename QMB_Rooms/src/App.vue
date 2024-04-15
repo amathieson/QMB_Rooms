@@ -38,8 +38,8 @@ import Timetable_viewer from "./components/timetable_viewer.vue";
       </div>
       <sub class="foot">Last Updated: <code>{{dateFormat(last_fetch)}}</code> - Data Pulled: <code>{{dateFormat(data_pulled*1000)}}</code></sub>
   </div>
-  <div class="fab icon" @click="showtimetable=true">📅</div>
-  <timetable_viewer ref="timetable" :open="showtimetable" @close="showtimetable = false" :room="rooms[room]?.next?.roomID"></timetable_viewer>
+  <div class="fab icon" @click="show_timetable=true">📅</div>
+  <timetable_viewer ref="timetable" :open="show_timetable" @close="show_timetable = false" :room="rooms[room]?.next?.roomID"></timetable_viewer>
 </template>
 
 <style scoped>
@@ -55,7 +55,7 @@ export default {
   data: ()=>{
     return {
       "notification": "Platform in early access please excuse any issues.",
-      "showtimetable":false,
+      "show_timetable":false,
       "data_pulled":0,
       "last_fetch":0,
       "room":0,
