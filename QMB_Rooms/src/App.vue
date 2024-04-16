@@ -47,6 +47,7 @@ import Timetable_viewer from "./components/timetable_viewer.vue";
 </style>
 <script>
 export default {
+  name:"QMB_Rooms",
   computed: {
     dateSec: ()=>{
       return Date.now() / 1000;
