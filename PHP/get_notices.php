@@ -1,3 +1,3 @@
 <?php
 include_once "api_header.php";
-echo file_get_contents("room_notices.json");
+echo json_encode(json_decode(file_get_contents("config.json"))->room_notices);

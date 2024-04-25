@@ -4,7 +4,7 @@ include_once "api_header.php";
 
 // Retrieving events and room translations from JSON files
 $events = json_decode(file_get_contents("cache/week.json"));
-$translations = json_decode(file_get_contents("room_translations.json"));
+$translations = json_decode(file_get_contents("config.json"))->room_translations;
 
 // Initializing an empty array to store timetable data
 $timetable = [];

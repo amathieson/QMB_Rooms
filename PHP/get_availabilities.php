@@ -1,7 +1,7 @@
 <?php
 include_once "api_header.php";
 $events = json_decode(file_get_contents("cache/week.json"));
-$translations = json_decode(file_get_contents("room_translations.json"));
+$translations = json_decode(file_get_contents("config.json"))->room_translations;
 $rooms = [];
 foreach ($events->rooms as $room) {
     $roomName = isset($translations->$room) ? $translations->$room : $room;

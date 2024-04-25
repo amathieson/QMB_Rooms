@@ -1,6 +1,6 @@
 <?php
-$rootDir = "/var/www/html/qmb/";
-//$rootDir = "";
+//$rootDir = "/var/www/html/qmb/";
+$rootDir = "";
 header("content-type: application/json");
 ini_set("date.timezone", "Europe/London");
 $arrContextOptions=array(
@@ -9,19 +9,17 @@ $arrContextOptions=array(
         "verify_peer_name"=>false,
     ),
 );
+if (!file_exists($rootDir . "cache"))
+    mkdir($rootDir . "cache");
+$config = json_decode(file_get_contents("config.json"));
 
-$_AccessPath = "https://timetable.dundee.ac.uk:8086/reporting/textspreadsheet?objectclass=locations&idtype=id" .
-"&identifier=9994.0.G03" . // Lab 0 - General Teaching Labs
-"&identifier=9994.0.G04" . // Lab 1 - General Teaching Labs
-"&identifier=9994.0.G06" . // Lab 2 - General Teaching Labs
-"&identifier=9994.0.G11" . // Lab 3 - Consider Marking Social Space
-"&identifier=9994.1.1.12" . // Lab 4 - 4th Years
-"&identifier=9994.1.1.13" . // Lab 5 - MsC
-"&identifier=9994-G.08" . // Seminar Room
-"&template=SWSCUST+location+textspreadsheet";
+$_AccessPath = $config->timetable_endpoint . "&identifier=" . implode("&identifier=", $config->rooms);
+
 $events = [];
 $html = file_get_contents($_AccessPath, false, stream_context_create($arrContextOptions));
 $modules = json_decode(file_get_contents($rootDir . "cache/modules.json"));
+if($modules===null)
+    $modules = new stdClass();
 
 $doc = new DOMDocument();
 @$doc->loadHTML($html);
@@ -107,11 +105,13 @@ foreach ($tables as $table) {
         $module_code = substr($activity, 0, 7);
         if (preg_match($pattern, $module_code)) {
             if (!isset($modules->$module_code)) {
-                $html1 = file_get_contents("https://www.dundee.ac.uk/module/" . $module_code);
-                $doc1 = new DOMDocument();
-                @$doc1->loadHTML($html1);
-                $xpath1 = new DOMXPath($doc1);
-                $modules->$module_code = $xpath1->query("//h1[contains(@class, 'hero__title')]")->item(0)->textContent;
+                $html1 = file_get_contents($config->modules_endpoint . $module_code);
+                if ($html1) {
+                    $doc1 = new DOMDocument();
+                    @$doc1->loadHTML($html1);
+                    $xpath1 = new DOMXPath($doc1);
+                    $modules->$module_code = $xpath1->query("//h1[contains(@class, 'hero__title')]")->item(0)->textContent;
+                }
             }
             $event["module"] = [
               "code" => $module_code,
