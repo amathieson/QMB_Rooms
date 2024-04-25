@@ -91,7 +91,7 @@ export default {
         }
       ],
       root: "https://adam.mathieson.dev/qmb",
-      // root: "http://localhost:8080",
+      // root: "http://localhost:8000",
       days: ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
       notes: {}
     }
