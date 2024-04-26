@@ -1,6 +1,6 @@
 <?php
-//$rootDir = "/var/www/html/qmb/";
-$rootDir = "";
+$rootDir = "/var/www/html/qmb/";
+//$rootDir = "";
 header("content-type: application/json");
 ini_set("date.timezone", "Europe/London");
 $arrContextOptions=array(
