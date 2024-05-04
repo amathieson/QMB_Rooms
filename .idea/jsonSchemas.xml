@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JsonSchemaMappingsProjectConfiguration">
+    <state>
+      <map>
+        <entry key="QMB_ROOMS">
+          <value>
+            <SchemaInfo>
+              <option name="generatedName" value="New Schema" />
+              <option name="name" value="QMB_ROOMS" />
+              <option name="relativePathToSchema" value="PHP/QMB_ROOMS.schema.json" />
+              <option name="patterns">
+                <list>
+                  <Item>
+                    <option name="path" value="PHP/config.json" />
+                  </Item>
+                </list>
+              </option>
+            </SchemaInfo>
+          </value>
+        </entry>
+      </map>
+    </state>
+  </component>
+</project>

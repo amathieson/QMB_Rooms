@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "timetable_endpoint": {
+      "type": "string",
+      "format": "uri"
+    },
+    "rooms": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "modules_endpoint": {
+      "type": "string",
+      "format": "uri"
+    },
+    "room_notices": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "room_translations": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    }
+  },
+  "required": ["timetable_endpoint", "rooms", "modules_endpoint", "room_notices", "room_translations"]
+}
