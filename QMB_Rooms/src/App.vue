@@ -100,6 +100,7 @@ export default {
     this.fetchData(this);
   },
   methods: {
+    // Data fetching
     fetchData: (that)=>{
       fetch(that.root + "/get_notification.php").then((d)=>{d.json().then((dta)=>{that.notification = dta.notification})});
       fetch(that.root + "/get_notices.php").then((d)=>{d.json().then((dta)=>{that.notes = dta})});
@@ -120,11 +121,13 @@ export default {
         })
       })
     },
+    // Like a dot equals for dates
     sameDay: (d1, d2)=> {
       return d1.getFullYear() === d2.getFullYear() &&
           d1.getMonth() === d2.getMonth() &&
           d1.getDate() === d2.getDate();
     },
+    // String Formatting for dates
     dateFormat: (date)=> {
       const currentDate = new Date(date);
       return currentDate.getDate() + "/"
