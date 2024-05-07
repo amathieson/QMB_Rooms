@@ -49,6 +49,7 @@ import Timetable_viewer from "./components/timetable_viewer.vue";
 export default {
   name:"QMB_Rooms",
   computed: {
+    // Make Epochs that are more standard
     dateSec: ()=>{
       return Date.now() / 1000;
     }
