@@ -51,7 +51,7 @@ foreach ($timetable as $event) {
 $rm_ID = ($_GET['room']);
 
 // Encoding timetable data along with pull time, week, and room name into JSON format
-echo json_encode(["days"=>$days,"pull_time"=>$events->pull_time, "week"=>$events->week, "room"=>$translations->$rm_ID], JSON_PRETTY_PRINT);
+echo json_encode(["days" => $days, "pull_time" => $events->pull_time, "week" => $events->week, "room" => $translations->$rm_ID], JSON_PRETTY_PRINT);
 
 // Restoring the default timezone setting
 ini_restore("date.timezone");
