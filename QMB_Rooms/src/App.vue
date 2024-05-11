@@ -6,40 +6,54 @@ import Timetable_viewer from "./components/timetable_viewer.vue";
   <header>QMB_Rooms</header>
   <div class="view">
     <Transition name="notice">
-    <div class="room-note" v-if="rooms[room] !== undefined && notes[rooms[room].name] !== undefined">Please Note - {{notes[rooms[room].name]}}</div>
+      <div class="room-note" v-if="rooms[room] !== undefined && notes[rooms[room].name] !== undefined">Please Note -
+        {{ notes[rooms[room].name] }}
+      </div>
     </Transition>
-    <marquee class="note"><i>{{notification}}</i></marquee>
+    <marquee class="note"><i>{{ notification }}</i></marquee>
 
-      <div class="room-card" v-if="rooms[room] !== undefined">
-        <Transition mode="out-in">
-          <h3 :key="rooms[room].name">{{ rooms[room].name.startsWith("Lab") ? "Lab" : "" }}</h3>
-        </Transition>
-        <Transition mode="out-in">
-          <h1 :key="rooms[room].name">{{rooms[room].name.startsWith("Lab") ? rooms[room].name.substring(4) : rooms[room].name}}</h1>
-        </Transition>
+    <div class="room-card" v-if="rooms[room] !== undefined">
+      <Transition mode="out-in">
+        <h3 :key="rooms[room].name">{{ rooms[room].name.startsWith("Lab") ? "Lab" : "" }}</h3>
+      </Transition>
+      <Transition mode="out-in">
+        <h1 :key="rooms[room].name">
+          {{ rooms[room].name.startsWith("Lab") ? rooms[room].name.substring(4) : rooms[room].name }}</h1>
+      </Transition>
 
-        <Transition mode="out-in">
-          <span :key="rooms[room].name" class="state" :data-state="rooms[room].next.start <= dateSec && rooms[room].next.end > dateSec ? 'busy' : (rooms[room].next.start <= dateSec+60*60 && rooms[room].next.end > dateSec ? 'soon':'free')">&bullet;</span>
-        </Transition>
-        <Transition mode="out-in">
-          <sub :key="rooms[room].name + '_no_more'" v-if="rooms[room].next.start >= 9223372036854776000">No more scheduled classes.</sub>
-          <sub :key="rooms[room].name + '_busy'" v-else-if="rooms[room].next.start <= dateSec && rooms[room].next.end > dateSec">Busy until at least {{ new Date(rooms[room].next.end*1000).getHours() }}:{{ ("0" + new Date(rooms[room].next.end*1000).getMinutes()).slice(-2) }}</sub>
-          <sub :key="rooms[room].name + '_free'" v-else>Free until {{ new Date(rooms[room].next.start*1000).getHours() }}:{{("0" + new Date(rooms[room].next.start*1000).getMinutes()).slice(-2) }} <span v-if="!sameDay(new Date(rooms[room].next.start*1000), new Date())">On {{days[new Date(rooms[room].next.start*1000).getDay()]}}</span></sub>
-        </Transition>
+      <Transition mode="out-in">
+        <span :key="rooms[room].name" class="state"
+              :data-state="rooms[room].next.start <= dateSec && rooms[room].next.end > dateSec ? 'busy' : (rooms[room].next.start <= dateSec+60*60 && rooms[room].next.end > dateSec ? 'soon':'free')">&bullet;</span>
+      </Transition>
+      <Transition mode="out-in">
+        <sub :key="rooms[room].name + '_no_more'" v-if="rooms[room].next.start >= 9223372036854776000">No more scheduled
+          classes.</sub>
+        <sub :key="rooms[room].name + '_busy'"
+             v-else-if="rooms[room].next.start <= dateSec && rooms[room].next.end > dateSec">Busy until at least {{
+            new Date(rooms[room].next.end * 1000).getHours()
+          }}:{{ ("0" + new Date(rooms[room].next.end * 1000).getMinutes()).slice(-2) }}</sub>
+        <sub :key="rooms[room].name + '_free'" v-else>Free until {{
+            new Date(rooms[room].next.start * 1000).getHours()
+          }}:{{ ("0" + new Date(rooms[room].next.start * 1000).getMinutes()).slice(-2) }} <span
+              v-if="!sameDay(new Date(rooms[room].next.start*1000), new Date())">On {{ days[new Date(rooms[room].next.start * 1000).getDay()] }}</span></sub>
+      </Transition>
+    </div>
+
+    <div class="room-list">
+      <div class="room" v-for="rm in rooms" @click="room = rooms.indexOf(rm);">
+        <h5>{{ rm.name.startsWith("Lab") ? "Lab" : "&nbsp;" }}</h5>
+        <h4 v-if="rm.name.startsWith('Lab')">{{ rm.name.substring(4) }}</h4>
+        <h5 v-else>{{ rm.name }}</h5>
+        <span class="state"
+              :data-state="rm.next.start <= dateSec && rm.next.end > dateSec ? 'busy' : (rm.next.start <= dateSec+60*60 && rm.next.end > dateSec ? 'soon':'free')">&bullet;</span>
       </div>
-
-      <div class="room-list">
-        <div class="room" v-for="rm in rooms" @click="room = rooms.indexOf(rm);">
-          <h5>{{ rm.name.startsWith("Lab") ? "Lab" : "&nbsp;" }}</h5>
-          <h4 v-if="rm.name.startsWith('Lab')">{{rm.name.substring(4)}}</h4>
-          <h5 v-else>{{ rm.name }}</h5>
-          <span class="state" :data-state="rm.next.start <= dateSec && rm.next.end > dateSec ? 'busy' : (rm.next.start <= dateSec+60*60 && rm.next.end > dateSec ? 'soon':'free')">&bullet;</span>
-        </div>
-      </div>
-      <sub class="foot">Last Updated: <code>{{dateFormat(last_fetch)}}</code> - Data Pulled: <code>{{dateFormat(data_pulled*1000)}}</code></sub>
+    </div>
+    <sub class="foot">Last Updated: <code>{{ dateFormat(last_fetch) }}</code> - Data Pulled:
+      <code>{{ dateFormat(data_pulled * 1000) }}</code></sub>
   </div>
   <div class="fab icon" @click="show_timetable=true">📅</div>
-  <timetable_viewer ref="timetable" :open="show_timetable" @close="show_timetable = false" :room="rooms[room]?.next?.roomID"></timetable_viewer>
+  <timetable_viewer ref="timetable" :open="show_timetable" @close="show_timetable = false"
+                    :room="rooms[room]?.next?.roomID"></timetable_viewer>
 </template>
 
 <style scoped>
@@ -47,53 +61,53 @@ import Timetable_viewer from "./components/timetable_viewer.vue";
 </style>
 <script>
 export default {
-  name:"QMB_Rooms",
+  name: "QMB_Rooms",
   computed: {
     // Make Epochs that are more standard
-    dateSec: ()=>{
+    dateSec: () => {
       return Date.now() / 1000;
     }
   },
-  data: ()=>{
+  data: () => {
     return {
       "notification": "Platform in early access please excuse any issues.",
-      "show_timetable":false,
-      "data_pulled":0,
-      "last_fetch":0,
-      "room":0,
+      "show_timetable": false,
+      "data_pulled": 0,
+      "last_fetch": 0,
+      "room": 0,
       "rooms": [
         {
-          "name":"Lab 0",
-          "next":{}
+          "name": "Lab 0",
+          "next": {}
         },
         {
-          "name":"Lab 1",
-          "next":{}
+          "name": "Lab 1",
+          "next": {}
         },
         {
-          "name":"Lab 2",
-          "next":{}
+          "name": "Lab 2",
+          "next": {}
         },
         {
-          "name":"Lab 3",
-          "next":{}
+          "name": "Lab 3",
+          "next": {}
         },
         {
-          "name":"Lab 4",
-          "next":{}
+          "name": "Lab 4",
+          "next": {}
         },
         {
-          "name":"Lab 5",
-          "next":{}
+          "name": "Lab 5",
+          "next": {}
         },
         {
-          "name":"Seminar Room",
-          "next":{}
+          "name": "Seminar Room",
+          "next": {}
         }
       ],
       root: "https://adam.mathieson.dev/qmb",
       // root: "http://localhost:8000",
-      days: ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
+      days: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
       notes: {}
     }
   },
@@ -102,37 +116,48 @@ export default {
   },
   methods: {
     // Data fetching
-    fetchData: (that)=>{
-      fetch(that.root + "/get_notification.php").then((d)=>{d.json().then((dta)=>{that.notification = dta.notification})});
-      fetch(that.root + "/get_notices.php").then((d)=>{d.json().then((dta)=>{that.notes = dta})});
-      fetch( that.root + "/get_availabilities.php").then((d)=>{d.json().then((dta)=>{
-        let arr = [];
-        for (const dtaKey in dta.rooms) {
-          let room = dta.rooms[dtaKey];
-          arr.push(
-              {
-                "name":room.room,
-                "next":room
-              });
-        }
-        that.rooms = arr;
-        that.last_fetch = Date.now();
-        that.data_pulled = dta.pull_time;
-        setTimeout(()=>{that.fetchData(that)}, 60*1000);
+    fetchData: (that) => {
+      fetch(that.root + "/get_notification.php").then((d) => {
+        d.json().then((dta) => {
+          that.notification = dta.notification
+        })
+      });
+      fetch(that.root + "/get_notices.php").then((d) => {
+        d.json().then((dta) => {
+          that.notes = dta
+        })
+      });
+      fetch(that.root + "/get_availabilities.php").then((d) => {
+        d.json().then((dta) => {
+          let arr = [];
+          for (const dtaKey in dta.rooms) {
+            let room = dta.rooms[dtaKey];
+            arr.push(
+                {
+                  "name": room.room,
+                  "next": room
+                });
+          }
+          that.rooms = arr;
+          that.last_fetch = Date.now();
+          that.data_pulled = dta.pull_time;
+          setTimeout(() => {
+            that.fetchData(that)
+          }, 60 * 1000);
         })
       })
     },
     // Like a dot equals for dates
-    sameDay: (d1, d2)=> {
+    sameDay: (d1, d2) => {
       return d1.getFullYear() === d2.getFullYear() &&
           d1.getMonth() === d2.getMonth() &&
           d1.getDate() === d2.getDate();
     },
     // String Formatting for dates
-    dateFormat: (date)=> {
+    dateFormat: (date) => {
       const currentDate = new Date(date);
       return currentDate.getDate() + "/"
-          + (currentDate.getMonth()+1)  + "/"
+          + (currentDate.getMonth() + 1) + "/"
           + currentDate.getFullYear() + " @ "
           + currentDate.getHours() + ":"
           + ("0" + currentDate.getMinutes()).slice(-2) + ":"
