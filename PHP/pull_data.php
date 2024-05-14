@@ -3,10 +3,10 @@ $rootDir = "/var/www/html/qmb/";
 //$rootDir = "";
 header("content-type: application/json");
 ini_set("date.timezone", "Europe/London");
-$arrContextOptions=array(
-    "ssl"=>array(
-        "verify_peer"=>false,
-        "verify_peer_name"=>false,
+$arrContextOptions = array(
+    "ssl" => array(
+        "verify_peer" => false,
+        "verify_peer_name" => false,
     ),
 );
 if (!file_exists($rootDir . "cache"))
@@ -18,7 +18,7 @@ $_AccessPath = $config->timetable_endpoint . "&identifier=" . implode("&identifi
 $events = [];
 $html = file_get_contents($_AccessPath, false, stream_context_create($arrContextOptions));
 $modules = json_decode(file_get_contents($rootDir . "cache/modules.json"));
-if($modules===null)
+if ($modules === null)
     $modules = new stdClass();
 
 $doc = new DOMDocument();
@@ -31,8 +31,8 @@ $tables = $xpath->query("//table[contains(@class, 'spreadsheet')]");
 // Loop through the tables and extract data
 $room_name = "";
 $week = [
-    "number"=>"",
-    "dates"=>""
+    "number" => "",
+    "dates" => ""
 ];
 $rooms = [];
 foreach ($tables as $table) {
@@ -60,8 +60,8 @@ foreach ($tables as $table) {
 
                 $room_name = $room;
                 $week = [
-                    "number"=>$weekNumber,
-                    "dates"=>$dates
+                    "number" => $weekNumber,
+                    "dates" => $dates
                 ];
                 if (!in_array($room, $rooms)) {
                     $rooms[] = $room;
@@ -73,7 +73,7 @@ foreach ($tables as $table) {
 
     // Get the rows of the table
     $rows = $xpath->query(".//tr", $table);
-    $days = ["Monday"=>0, "Tuesday"=>1, "Wednesday"=>2, "Thursday"=>3, "Friday"=>4, "Saturday"=>5, "Sunday"=>6];
+    $days = ["Monday" => 0, "Tuesday" => 1, "Wednesday" => 2, "Thursday" => 3, "Friday" => 4, "Saturday" => 5, "Sunday" => 6];
     $week_start = strtotime(explode("-", $week['dates'])[0]);
 
     // Loop through the rows and extract data for each activity
@@ -91,15 +91,15 @@ foreach ($tables as $table) {
         $staff = $columns->item(6)->nodeValue;
         $room = $columns->item(7)->nodeValue;
         $event = [
-            "day"=>$day,
-            "title"=>$activity,
-            "type"=>$type,
-            "start"=>strtotime($start . " " . date("d M y", $week_start + ($days[$day]*24*60*60))),
-            "end"=>strtotime($end . " " . date("d M y", $week_start + ($days[$day]*24*60*60))),
-            "staff"=>$staff,
-            "room"=>$room_name,
-            "week"=>$week,
-            "module"=>[]
+            "day" => $day,
+            "title" => $activity,
+            "type" => $type,
+            "start" => strtotime($start . " " . date("d M y", $week_start + ($days[$day] * 24 * 60 * 60))),
+            "end" => strtotime($end . " " . date("d M y", $week_start + ($days[$day] * 24 * 60 * 60))),
+            "staff" => $staff,
+            "room" => $room_name,
+            "week" => $week,
+            "module" => []
         ];
         $pattern = '/^[A-Z]{2}\d{5}$/';
         $module_code = substr($activity, 0, 7);
@@ -114,8 +114,8 @@ foreach ($tables as $table) {
                 }
             }
             $event["module"] = [
-              "code" => $module_code,
-              "name" => $modules->$module_code
+                "code" => $module_code,
+                "name" => $modules->$module_code
             ];
         }
         $events[] = $event;
@@ -127,7 +127,7 @@ if ($curr_week->week->number != $week['number']) {
     rename($rootDir . "cache/week.json", $rootDir . "cache/history/week_" . $curr_week->week->number . ".json");
 }
 
-file_put_contents($rootDir . "cache/week.json", json_encode(["pull_time"=>time(), "week"=>$week, "events"=>$events, "rooms"=>$rooms]));
+file_put_contents($rootDir . "cache/week.json", json_encode(["pull_time" => time(), "week" => $week, "events" => $events, "rooms" => $rooms]));
 file_put_contents($rootDir . "cache/modules.json", json_encode($modules));
 echo "Timetable cache updated - week: " . $week['number'] . " - " . sizeof($events) . " events loaded.";
 ini_restore("date.timezone");
