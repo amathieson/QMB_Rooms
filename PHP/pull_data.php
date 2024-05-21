@@ -3,25 +3,23 @@ $rootDir = "/var/www/html/qmb/";
 //$rootDir = "";
 header("content-type: application/json");
 ini_set("date.timezone", "Europe/London");
-$arrContextOptions=array(
-    "ssl"=>array(
-        "verify_peer"=>false,
-        "verify_peer_name"=>false,
+$arrContextOptions = array(
+    "ssl" => array(
+        "verify_peer" => false,
+        "verify_peer_name" => false,
     ),
 );
+if (!file_exists($rootDir . "cache"))
+    mkdir($rootDir . "cache");
+$config = json_decode(file_get_contents("config.json"));
 
-$_AccessPath = "https://timetable.dundee.ac.uk:8086/reporting/textspreadsheet?objectclass=locations&idtype=id" .
-"&identifier=9994.0.G03" . // Lab 0
-"&identifier=9994.0.G04" . // Lab 1
-"&identifier=9994.0.G06" . // Lab 2
-"&identifier=9994.0.G11" . // Lab 3
-"&identifier=9994.1.1.12" . // Lab 4
-"&identifier=9994.1.1.13" . // Lab 5
-"&identifier=9994-G.08" . // Seminar Room
-"&template=SWSCUST+location+textspreadsheet";
+$_AccessPath = $config->timetable_endpoint . "&identifier=" . implode("&identifier=", $config->rooms);
+
 $events = [];
 $html = file_get_contents($_AccessPath, false, stream_context_create($arrContextOptions));
 $modules = json_decode(file_get_contents($rootDir . "cache/modules.json"));
+if ($modules === null)
+    $modules = new stdClass();
 
 $doc = new DOMDocument();
 @$doc->loadHTML($html);
@@ -33,8 +31,8 @@ $tables = $xpath->query("//table[contains(@class, 'spreadsheet')]");
 // Loop through the tables and extract data
 $room_name = "";
 $week = [
-    "number"=>"",
-    "dates"=>""
+    "number" => "",
+    "dates" => ""
 ];
 $rooms = [];
 foreach ($tables as $table) {
@@ -62,8 +60,8 @@ foreach ($tables as $table) {
 
                 $room_name = $room;
                 $week = [
-                    "number"=>$weekNumber,
-                    "dates"=>$dates
+                    "number" => $weekNumber,
+                    "dates" => $dates
                 ];
                 if (!in_array($room, $rooms)) {
                     $rooms[] = $room;
@@ -75,7 +73,7 @@ foreach ($tables as $table) {
 
     // Get the rows of the table
     $rows = $xpath->query(".//tr", $table);
-    $days = ["Monday"=>0, "Tuesday"=>1, "Wednesday"=>2, "Thursday"=>3, "Friday"=>4, "Saturday"=>5, "Sunday"=>6];
+    $days = ["Monday" => 0, "Tuesday" => 1, "Wednesday" => 2, "Thursday" => 3, "Friday" => 4, "Saturday" => 5, "Sunday" => 6];
     $week_start = strtotime(explode("-", $week['dates'])[0]);
 
     // Loop through the rows and extract data for each activity
@@ -93,29 +91,31 @@ foreach ($tables as $table) {
         $staff = $columns->item(6)->nodeValue;
         $room = $columns->item(7)->nodeValue;
         $event = [
-            "day"=>$day,
-            "title"=>$activity,
-            "type"=>$type,
-            "start"=>strtotime($start . " " . date("d M y", $week_start + ($days[$day]*24*60*60))),
-            "end"=>strtotime($end . " " . date("d M y", $week_start + ($days[$day]*24*60*60))),
-            "staff"=>$staff,
-            "room"=>$room_name,
-            "week"=>$week,
-            "module"=>[]
+            "day" => $day,
+            "title" => $activity,
+            "type" => $type,
+            "start" => strtotime($start . " " . date("d M y", $week_start + ($days[$day] * 24 * 60 * 60))),
+            "end" => strtotime($end . " " . date("d M y", $week_start + ($days[$day] * 24 * 60 * 60))),
+            "staff" => $staff,
+            "room" => $room_name,
+            "week" => $week,
+            "module" => []
         ];
         $pattern = '/^[A-Z]{2}\d{5}$/';
         $module_code = substr($activity, 0, 7);
         if (preg_match($pattern, $module_code)) {
             if (!isset($modules->$module_code)) {
-                $html1 = file_get_contents("https://www.dundee.ac.uk/module/" . $module_code);
-                $doc1 = new DOMDocument();
-                @$doc1->loadHTML($html1);
-                $xpath1 = new DOMXPath($doc1);
-                $modules->$module_code = $xpath1->query("//h1[contains(@class, 'hero__title')]")->item(0)->textContent;
+                $html1 = file_get_contents($config->modules_endpoint . $module_code);
+                if ($html1) {
+                    $doc1 = new DOMDocument();
+                    @$doc1->loadHTML($html1);
+                    $xpath1 = new DOMXPath($doc1);
+                    $modules->$module_code = $xpath1->query("//h1[contains(@class, 'hero__title')]")->item(0)->textContent;
+                }
             }
             $event["module"] = [
-              "code" => $module_code,
-              "name" => $modules->$module_code
+                "code" => $module_code,
+                "name" => $modules->$module_code
             ];
         }
         $events[] = $event;
@@ -127,7 +127,7 @@ if ($curr_week->week->number != $week['number']) {
     rename($rootDir . "cache/week.json", $rootDir . "cache/history/week_" . $curr_week->week->number . ".json");
 }
 
-file_put_contents($rootDir . "cache/week.json", json_encode(["pull_time"=>time(), "week"=>$week, "events"=>$events, "rooms"=>$rooms]));
+file_put_contents($rootDir . "cache/week.json", json_encode(["pull_time" => time(), "week" => $week, "events" => $events, "rooms" => $rooms]));
 file_put_contents($rootDir . "cache/modules.json", json_encode($modules));
 echo "Timetable cache updated - week: " . $week['number'] . " - " . sizeof($events) . " events loaded.";
 ini_restore("date.timezone");

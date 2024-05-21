@@ -1,93 +1,247 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Emoji:wght@500&display=swap');
+
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    font-weight: 400;
 
-  color-scheme: light dark;
-  --primary:#FFFFFFDD;
-  --background:#242424;
-  color: var(--primary);
-  background-color: var(--background);
+    color-scheme: light dark;
+    --primary: #FFFFFFDD;
+    --background: #242424;
+    color: var(--primary);
+    background-color: var(--background);
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
 }
 
 a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
+    font-weight: 500;
+    color: #646cff;
+    text-decoration: inherit;
 }
+
 a:hover {
-  color: #535bf2;
+    color: #535bf2;
 }
 
 a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
+    font-weight: 500;
+    color: #646cff;
+    text-decoration: inherit;
 }
+
 a:hover {
-  color: #535bf2;
+    color: #535bf2;
 }
 
 body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+    margin: 0;
+    display: flex;
+    place-items: center;
+    min-width: 320px;
+    min-height: 100vh;
 }
 
 h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+    font-size: 3.2em;
+    line-height: 1.1;
 }
 
 button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    padding: 0.6em 1.2em;
+    font-size: 1em;
+    font-weight: 500;
+    font-family: inherit;
+    background-color: #1a1a1a;
+    cursor: pointer;
+    transition: border-color 0.25s;
 }
+
 button:hover {
-  border-color: #646cff;
+    border-color: #646cff;
 }
+
 button:focus,
 button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+    outline: 4px auto -webkit-focus-ring-color;
 }
 
 .card {
-  padding: 2em;
+    padding: 2em;
 }
 
 #app {
-  margin: 0 auto;
-  text-align: center;
+    margin: 0 auto;
+    text-align: center;
 }
+
 .icon {
-  font-family: 'Noto Emoji', sans-serif;
+    font-family: 'Noto Emoji', sans-serif;
 }
 
 @media (prefers-color-scheme: light) {
-  :root {
-    --primary:#213547;
-    --background:#ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+    :root {
+        --primary: #213547;
+        --background: #ffffff;
+    }
+
+    a:hover {
+        color: #747bff;
+    }
+
+    button {
+        background-color: #f9f9f9;
+    }
+}
+
+
+.fab {
+    position: absolute;
+    background: #ff3333;
+    padding: 0.5em;
+    border-radius: 50%;
+    font-size: 18pt;
+    right: 1em;
+    bottom: 2em;
+    z-index: 5;
+    box-shadow: #1a1a1a 0 0 16px 2px;
+    color: #ffffff;
+    aspect-ratio: 1;
+    width: 24pt;
+    height: 24pt;
+    cursor: pointer;
+}
+
+.fab:active {
+    background: #ff3333AA;
+}
+
+.fab:hover {
+    background: #ff3333CC;
+}
+
+.room-list {
+    width: 80vw;
+    display: grid;
+    grid-template-columns: repeat(7, calc(80vw / 7));
+    align-items: center;
+    justify-items: center;
+    margin: auto;
+}
+
+.state {
+    display: block;
+    font-size: 3em;
+    color: rgb(128, 128, 128);
+}
+
+.room {
+    font-size: 10pt;
+    display: grid;
+    grid-template-rows: 1em 4em 1em;
+    align-items: center;
+    width: 100%;
+    cursor: pointer;
+    padding: 1em 0;
+    transition: background 250ms ease;
+}
+
+.room:active {
+    background: rgba(0, 0, 0, 1);
+}
+
+.room:hover {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.room > h4 {
+    font-size: 2em;
+}
+
+.state[data-state=free] {
+    color: green;
+}
+
+.state[data-state=soon] {
+    color: orange;
+}
+
+.state[data-state=busy] {
+    color: red;
+}
+
+.room-card {
+    font-size: 18pt;
+    width: 80vw;
+    margin: 0 auto 2em;
+}
+
+.room-card > h1 {
+    margin: 0;
+}
+
+.room-card > sub {
+    font-size: 0.75em;
+}
+
+header {
+    width: 100%;
+    height: 36pt;
+    background: #646cff;
+    top: 0;
+    left: 0;
+    position: absolute;
+    font-size: 24pt;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+.foot {
+    display: block;
+    margin-top: 5em;
+    width: 100%;
+}
+
+.view {
+    position: absolute;
+    top: 36pt;
+    left: 0;
+    max-height: calc(100vh - 36pt);
+    width: 100%;
+    overflow-y: auto;
+}
+
+.room-note {
+    margin: auto;
+    width: fit-content;
+    padding: 1.5em;
+    background: hsl(56 75% 61% / 1);
+    color: #242424;
+    font-weight: bold;
+}
+
+.v-enter-active,
+.v-leave-active {
+    transition: opacity 250ms ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+    opacity: 0;
+}
+
+.notice-enter-active,
+.notice-leave-active {
+    transition: transform 250ms ease;
+}
+
+.notice-enter-from,
+.notice-leave-to {
+    transform: translateY(-100%);
 }

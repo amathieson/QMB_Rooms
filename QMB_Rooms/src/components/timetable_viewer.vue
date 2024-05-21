@@ -1,7 +1,12 @@
 <script setup>
 
 </script>
-
+<!-- Page doesn't refresh correctly, the colours don't update-->
+<!-- Comment was written by Purple following a long day of stage construction =D -->
+<!--  Hi future Adam. -->
+<!-- This is another comment written by Purple, a day after the first -->
+<!-- "It's all about those streaks" ~ Adam 2024-->
+<!--Hi again future Adam <3-->
 <template>
   <div :open="open" class="dialog-backdrop" ref="backdrop" @click="close">
     <transition mode="in-out">
