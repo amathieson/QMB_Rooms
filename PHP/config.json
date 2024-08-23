@@ -1,5 +1,5 @@
 {
-  "timetable_endpoint": "https://timetable.dundee.ac.uk:8086/reporting/textspreadsheet?objectclass=locations&idtype=id&template=SWSCUST+location+textspreadsheet",
+  "timetable_endpoint": "https://timetable.dundee.ac.uk:8087/reporting/textspreadsheet?objectclass=locations&idtype=id&template=SWSCUST+location+textspreadsheet",
   "rooms": ["9994.0.G03","9994.0.G04","9994.0.G06","9994.0.G11","9994.1.1.12","9994.1.1.13","9994-G.08"],
   "modules_endpoint": "https://www.dundee.ac.uk/module/",
   "room_notices": {
